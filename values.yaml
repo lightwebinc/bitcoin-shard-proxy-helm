@@ -60,6 +60,16 @@ config:
   # BRC-130 path MTU for fragmentation. 0 = disabled.
   fragMtu: 0
   drainTimeout: "0s"
+
+  # Two-tier ingress TxID deduplication.
+  # Tier-1: in-process LRU (always active when localCap > 0).
+  # Tier-2: Redis SETNX (active when redisAddr is non-empty).
+  # Set localCap: 0 to disable ingress dedup entirely.
+  txidDedup:
+    localCap: 1048576    # tier-1 LRU capacity; 0 = disable
+    redisAddr: ""        # Redis addr; empty = local-only (no cluster coordination)
+    prefix: "bsp:tx:"   # Redis key prefix — must match listener's ingressSet.prefix
+    ttl: "10m"           # Redis entry TTL (1m–30m typical)
   debug: false
   metricsAddr: ":9100"
   instanceId: ""

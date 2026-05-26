@@ -46,7 +46,16 @@
         "mcScope":       { "type": "string", "enum": ["link", "site", "org", "global"] },
         "numWorkers":    { "type": "integer", "minimum": 0 },
         "fragMtu":       { "type": "integer", "minimum": 0 },
-        "debug":         { "type": "boolean" }
+        "debug":         { "type": "boolean" },
+        "txidDedup": {
+          "type": "object",
+          "properties": {
+            "localCap":  { "type": "integer", "minimum": 0 },
+            "redisAddr": { "type": "string" },
+            "prefix":    { "type": "string" },
+            "ttl":       { "type": "string" }
+          }
+        }
       }
     }
   }

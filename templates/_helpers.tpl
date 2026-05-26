@@ -126,6 +126,18 @@ Container env vars rendered from .Values.config plus extraEnv passthrough.
 - name: OTLP_INTERVAL
   value: {{ .Values.config.otlpInterval | quote }}
 {{- end }}
+{{- if .Values.config.txidDedup }}
+- name: TXID_DEDUP_LOCAL_CAP
+  value: {{ .Values.config.txidDedup.localCap | quote }}
+- name: TXID_DEDUP_PREFIX
+  value: {{ .Values.config.txidDedup.prefix | quote }}
+- name: TXID_DEDUP_TTL
+  value: {{ .Values.config.txidDedup.ttl | quote }}
+{{- if .Values.config.txidDedup.redisAddr }}
+- name: TXID_DEDUP_REDIS_ADDR
+  value: {{ .Values.config.txidDedup.redisAddr | quote }}
+{{- end }}
+{{- end }}
 {{- with .Values.extraEnv }}
 {{ toYaml . }}
 {{- end }}
