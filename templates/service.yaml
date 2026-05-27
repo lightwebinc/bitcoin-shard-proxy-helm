@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "bitcoin-shard-proxy.fullname" . }}
+  name: {{ include "shard-proxy.fullname" . }}
   labels:
-    {{- include "bitcoin-shard-proxy.labels" . | nindent 4 }}
+    {{- include "shard-proxy.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   selector:
-    {{- include "bitcoin-shard-proxy.selectorLabels" . | nindent 4 }}
+    {{- include "shard-proxy.selectorLabels" . | nindent 4 }}
   ports:
     - name: metrics
       port: {{ .Values.service.metricsPort }}

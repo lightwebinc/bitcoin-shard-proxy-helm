@@ -1,10 +1,10 @@
-# Default values for bitcoin-shard-proxy.
+# Default values for shard-proxy.
 # Every binary flag is exposed under .config; advanced ones empty/disabled by default.
 
 replicaCount: 1
 
 image:
-  repository: ghcr.io/lightwebinc/bitcoin-shard-proxy
+  repository: ghcr.io/lightwebinc/shard-proxy
   pullPolicy: IfNotPresent
   # Defaults to .Chart.AppVersion when empty.
   tag: ""
@@ -36,14 +36,14 @@ networking:
   mode: multus
   multus:
     networkName: mcast-fabric
-    namespace: bitcoin-mcast
+    namespace: bsv-mcast
     # Per-pod fabric IPv6 in CIDR form. Must be unique per pod when replicaCount > 1.
     fabricIPv6: ""
     interface: net1
   host:
     dnsPolicy: ClusterFirstWithHostNet
 
-# Application configuration. Mirrors every flag in bitcoin-shard-proxy/config/config.go.
+# Application configuration. Mirrors every flag in shard-proxy/config/config.go.
 config:
   listenAddr: "[::]"
   udpListenPort: 9000

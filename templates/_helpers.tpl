@@ -1,14 +1,14 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "bitcoin-shard-proxy.name" -}}
+{{- define "shard-proxy.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Create a default fully qualified app name.
 */}}
-{{- define "bitcoin-shard-proxy.fullname" -}}
+{{- define "shard-proxy.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -24,35 +24,35 @@ Create a default fully qualified app name.
 {{/*
 Chart label string.
 */}}
-{{- define "bitcoin-shard-proxy.chart" -}}
+{{- define "shard-proxy.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Common labels.
 */}}
-{{- define "bitcoin-shard-proxy.labels" -}}
-helm.sh/chart: {{ include "bitcoin-shard-proxy.chart" . }}
-{{ include "bitcoin-shard-proxy.selectorLabels" . }}
+{{- define "shard-proxy.labels" -}}
+helm.sh/chart: {{ include "shard-proxy.chart" . }}
+{{ include "shard-proxy.selectorLabels" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-app.kubernetes.io/part-of: bitcoin-multicast
+app.kubernetes.io/part-of: bsv-multicast
 {{- end -}}
 
 {{/*
 Selector labels.
 */}}
-{{- define "bitcoin-shard-proxy.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "bitcoin-shard-proxy.name" . }}
+{{- define "shard-proxy.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "shard-proxy.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{/*
 ServiceAccount name.
 */}}
-{{- define "bitcoin-shard-proxy.serviceAccountName" -}}
+{{- define "shard-proxy.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-{{- default (include "bitcoin-shard-proxy.fullname" .) .Values.serviceAccount.name -}}
+{{- default (include "shard-proxy.fullname" .) .Values.serviceAccount.name -}}
 {{- else -}}
 {{- default "default" .Values.serviceAccount.name -}}
 {{- end -}}
@@ -61,7 +61,7 @@ ServiceAccount name.
 {{/*
 Multus annotation. Emits only when networking.mode=multus.
 */}}
-{{- define "bitcoin-shard-proxy.multusAnnotation" -}}
+{{- define "shard-proxy.multusAnnotation" -}}
 {{- if eq .Values.networking.mode "multus" -}}
 k8s.v1.cni.cncf.io/networks: |
   [{
@@ -78,7 +78,7 @@ k8s.v1.cni.cncf.io/networks: |
 {{/*
 Resolve the MULTICAST_IF env value based on networking.mode.
 */}}
-{{- define "bitcoin-shard-proxy.multicastIf" -}}
+{{- define "shard-proxy.multicastIf" -}}
 {{- if eq .Values.networking.mode "multus" -}}
 {{- .Values.networking.multus.interface -}}
 {{- else -}}
@@ -89,7 +89,7 @@ Resolve the MULTICAST_IF env value based on networking.mode.
 {{/*
 Container env vars rendered from .Values.config plus extraEnv passthrough.
 */}}
-{{- define "bitcoin-shard-proxy.env" -}}
+{{- define "shard-proxy.env" -}}
 - name: LISTEN_ADDR
   value: {{ .Values.config.listenAddr | quote }}
 - name: UDP_LISTEN_PORT
@@ -97,7 +97,7 @@ Container env vars rendered from .Values.config plus extraEnv passthrough.
 - name: TCP_LISTEN_PORT
   value: {{ .Values.config.tcpListenPort | quote }}
 - name: MULTICAST_IF
-  value: {{ include "bitcoin-shard-proxy.multicastIf" . | quote }}
+  value: {{ include "shard-proxy.multicastIf" . | quote }}
 - name: EGRESS_PORT
   value: {{ .Values.config.egressPort | quote }}
 - name: SHARD_BITS

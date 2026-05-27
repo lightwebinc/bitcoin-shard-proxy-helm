@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "bitcoin-shard-proxy values",
+  "title": "shard-proxy values",
   "type": "object",
   "additionalProperties": true,
   "properties": {

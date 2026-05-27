@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "bitcoin-shard-proxy.fullname" . }}
+  name: {{ include "shard-proxy.fullname" . }}
   labels:
-    {{- include "bitcoin-shard-proxy.labels" . | nindent 4 }}
+    {{- include "shard-proxy.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "bitcoin-shard-proxy.selectorLabels" . | nindent 6 }}
+      {{- include "shard-proxy.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
         {{- if eq .Values.networking.mode "multus" }}
-        {{- include "bitcoin-shard-proxy.multusAnnotation" . | nindent 8 }}
+        {{- include "shard-proxy.multusAnnotation" . | nindent 8 }}
         {{- end }}
         {{- if eq .Values.networking.mode "unicast" }}
         helm.sh/chart-warnings: "networking.mode=unicast is reserved for a future proxy release (EGRESS_MODE=unicast-list); not yet implemented"
@@ -24,12 +24,12 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
       labels:
-        {{- include "bitcoin-shard-proxy.selectorLabels" . | nindent 8 }}
+        {{- include "shard-proxy.selectorLabels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      serviceAccountName: {{ include "bitcoin-shard-proxy.serviceAccountName" . }}
+      serviceAccountName: {{ include "shard-proxy.serviceAccountName" . }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -54,7 +54,7 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           env:
-            {{- include "bitcoin-shard-proxy.env" . | nindent 12 }}
+            {{- include "shard-proxy.env" . | nindent 12 }}
           ports:
             - name: udp-ingress
               containerPort: {{ .Values.config.udpListenPort }}

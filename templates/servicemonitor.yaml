@@ -2,16 +2,16 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "bitcoin-shard-proxy.fullname" . }}
+  name: {{ include "shard-proxy.fullname" . }}
   labels:
-    {{- include "bitcoin-shard-proxy.labels" . | nindent 4 }}
+    {{- include "shard-proxy.labels" . | nindent 4 }}
     {{- with .Values.metrics.serviceMonitor.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
   selector:
     matchLabels:
-      {{- include "bitcoin-shard-proxy.selectorLabels" . | nindent 6 }}
+      {{- include "shard-proxy.selectorLabels" . | nindent 6 }}
   endpoints:
     - port: metrics
       path: {{ .Values.metrics.path }}

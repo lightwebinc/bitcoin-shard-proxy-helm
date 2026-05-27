@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "bitcoin-shard-proxy.fullname" . }}-test-metrics"
+  name: "{{ include "shard-proxy.fullname" . }}-test-metrics"
   labels:
-    {{- include "bitcoin-shard-proxy.labels" . | nindent 4 }}
+    {{- include "shard-proxy.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
@@ -16,5 +16,5 @@ spec:
         - sh
         - -c
         - |
-          wget -q -O - http://{{ include "bitcoin-shard-proxy.fullname" . }}:{{ .Values.service.metricsPort }}/healthz \
-            && wget -q -O - http://{{ include "bitcoin-shard-proxy.fullname" . }}:{{ .Values.service.metricsPort }}{{ .Values.metrics.path }} > /dev/null
+          wget -q -O - http://{{ include "shard-proxy.fullname" . }}:{{ .Values.service.metricsPort }}/healthz \
+            && wget -q -O - http://{{ include "shard-proxy.fullname" . }}:{{ .Values.service.metricsPort }}{{ .Values.metrics.path }} > /dev/null

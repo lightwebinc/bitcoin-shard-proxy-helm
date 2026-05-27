@@ -1,26 +1,26 @@
-# bitcoin-shard-proxy Helm chart
+# shard-proxy Helm chart
 
-Helm chart for [bitcoin-shard-proxy](https://github.com/lightwebinc/bitcoin-shard-proxy) — the IPv6 multicast frame proxy in the BSV multicast transaction distribution pipeline.
+Helm chart for [shard-proxy](https://github.com/lightwebinc/shard-proxy) — the IPv6 multicast frame proxy in the BSV multicast transaction distribution pipeline.
 
-This repository packages templates, default values, JSON Schema validation, and CI workflows for the proxy. The application source lives in [`bitcoin-shard-proxy`](https://github.com/lightwebinc/bitcoin-shard-proxy).
+This repository packages templates, default values, JSON Schema validation, and CI workflows for the proxy. The application source lives in [`shard-proxy`](https://github.com/lightwebinc/shard-proxy).
 
 ## Install
 
-> The chart references `ghcr.io/lightwebinc/bitcoin-shard-proxy:<appVersion>`. Until the corresponding image is published from the application repo, `helm install` will succeed in rendering but pods will `ImagePullBackOff`.
+> The chart references `ghcr.io/lightwebinc/shard-proxy:<appVersion>`. Until the corresponding image is published from the application repo, `helm install` will succeed in rendering but pods will `ImagePullBackOff`.
 
 ```bash
 # From the GitHub Pages repo (when published)
-helm repo add bsp https://lightwebinc.github.io/bitcoin-shard-proxy-helm
-helm install proxy bsp/bitcoin-shard-proxy -n bitcoin-mcast --create-namespace \
+helm repo add bsp https://lightwebinc.github.io/shard-proxy-helm
+helm install proxy bsp/shard-proxy -n bsv-mcast --create-namespace \
   --set networking.multus.fabricIPv6=fd20::21/64
 
 # Or OCI
-helm install proxy oci://ghcr.io/lightwebinc/charts/bitcoin-shard-proxy \
-  --version 0.1.0 -n bitcoin-mcast --create-namespace \
+helm install proxy oci://ghcr.io/lightwebinc/charts/shard-proxy \
+  --version 0.1.0 -n bsv-mcast --create-namespace \
   --set networking.multus.fabricIPv6=fd20::21/64
 
 # Or from a local clone
-helm install proxy . -n bitcoin-mcast --create-namespace \
+helm install proxy . -n bsv-mcast --create-namespace \
   --set networking.mode=host
 ```
 
@@ -28,11 +28,11 @@ helm install proxy . -n bitcoin-mcast --create-namespace \
 
 | Mode | Description |
 |---|---|
-| `multus` (default) | Primary CNI for control/metrics; macvlan secondary `net1` on dedicated fabric NIC. Requires a `NetworkAttachmentDefinition` named `mcast-fabric` in namespace `bitcoin-mcast`. |
+| `multus` (default) | Primary CNI for control/metrics; macvlan secondary `net1` on dedicated fabric NIC. Requires a `NetworkAttachmentDefinition` named `mcast-fabric` in namespace `bsv-mcast`. |
 | `host` | `hostNetwork: true`; `MULTICAST_IF` resolves to the host NIC named by `config.multicastIf`. Single-NIC fallback. |
 | `unicast` | Reserved for a future proxy `EGRESS_MODE=unicast-list` release. The chart renders pods but emits a `helm.sh/chart-warnings` annotation. |
 
-See the [composition spec](https://github.com/lightwebinc/bitcoin-multicast/blob/main/containerization/composition-spec.md) for wiring proxy + listener + retry-endpoint via Helmfile / ArgoCD / Terraform / plain Helm.
+See the [composition spec](https://github.com/lightwebinc/bsv-multicast/blob/main/containerization/composition-spec.md) for wiring proxy + listener + retry-endpoint via Helmfile / ArgoCD / Terraform / plain Helm.
 
 ## Values reference
 
@@ -43,7 +43,7 @@ The chart includes [`values.schema.json`](values.schema.json) — `helm install`
 ## Helm test
 
 ```bash
-helm test proxy -n bitcoin-mcast
+helm test proxy -n bsv-mcast
 ```
 
 Probes `/healthz` and `/metrics` on the metrics Service.
