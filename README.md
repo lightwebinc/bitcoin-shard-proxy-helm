@@ -9,12 +9,7 @@ This repository packages templates, default values, JSON Schema validation, and 
 > The chart references `ghcr.io/lightwebinc/shard-proxy:<appVersion>`. Until the corresponding image is published from the application repo, `helm install` will succeed in rendering but pods will `ImagePullBackOff`.
 
 ```bash
-# From the GitHub Pages repo (when published)
-helm repo add bsp https://lightwebinc.github.io/shard-proxy-helm
-helm install proxy bsp/shard-proxy -n bsv-mcast --create-namespace \
-  --set networking.multus.fabricIPv6=fd20::21/64
-
-# Or OCI
+# OCI registry
 helm install proxy oci://ghcr.io/lightwebinc/charts/shard-proxy \
   --version 0.1.0 -n bsv-mcast --create-namespace \
   --set networking.multus.fabricIPv6=fd20::21/64
