@@ -35,6 +35,16 @@ See [`values.yaml`](values.yaml) for the full annotated reference. Every flag ac
 
 The chart includes [`values.schema.json`](values.schema.json) — `helm install` rejects out-of-range `shardBits`, invalid `mcScope`, or invalid `networking.mode` before reaching the cluster.
 
+### SSM (Source-Specific Multicast)
+
+`config.sourceMode` (`asm` default, `ssm` opt-in) renders to the
+`SOURCE_MODE` env var. When `ssm`, set `config.bindSource` to the
+per-pod IPv6 from your Multus/Whereabouts allocation — each replica
+MUST hold a distinct address (anycast/ECMP-shared sources break
+PIM-SSM RPF). `bindSource` renders to `BIND_SOURCE`. See the
+[SSM Support Plan](https://github.com/lightwebinc/bsv-multicast/blob/main/docs/SourceSpecificMulticast/ssm-support-plan.md)
+for fabric prerequisites.
+
 ## Helm test
 
 ```bash
